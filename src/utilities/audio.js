@@ -4,7 +4,7 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Using_the_new_API_in_older_browsers
  */
 
-const recordSampleRate = 44100;
+const recordSampleRate = 44100; //may not be depends on recording device but is the case for Chrome and Mozilla
 export function getAudioStream() {
     // Older browsers might not implement mediaDevices at all, so we set an empty object first
     if (navigator.mediaDevices === undefined) {
@@ -107,6 +107,3 @@ export function encodeWAV(samples) {
     floatTo16BitPCM(view, 44, samples);
     return view;
 }
-
-
-

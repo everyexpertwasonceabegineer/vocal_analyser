@@ -1,7 +1,10 @@
 import React from 'react';
-import {getAudioStream, exportBuffer} from './utilities/audio.js'
+import {getAudioStream, exportBuffer} from './utilities/audio.js';
 import Recorder from 'recorder-js';
+import ResultsContainer from './ResultsContainer';
+import './ResultsContainer.css';
 const axios = require('axios');
+
 
 class RecordInterface extends React.Component {
     constructor(props) {
@@ -9,7 +12,8 @@ class RecordInterface extends React.Component {
         this.state = {
             stream: null,
             recording: false,
-            recorder: null
+            recorder: null,
+            emotions: null
         };
     }
     async componentDidMount() {
@@ -57,8 +61,12 @@ class RecordInterface extends React.Component {
               Accept: 'application/json',
               'Content-Type': 'multipart/form-data'
             }
-        }).then(res => console.log(res))
-
+        })
+        .then(res => {
+            console.log(res)
+            this.setState({emotions: res["data"]})
+            console.log(this.state.emotions)
+        })
 
         this.setState({
             recording: false
@@ -67,18 +75,25 @@ class RecordInterface extends React.Component {
 
     render() {
         const { recording, stream } = this.state;
-        // Don't show record button if their browser doesn't support it.
+
+
+        // Don't show interface if their browser doesn't support it.
         if (!stream) {
             return null;
         }
         return (
-            <button
-                onClick={() => {
-                    recording ? this.stopRecord() : this.startRecord();
-                }}
-            >
-                {recording ? 'Stop Recording' : 'Start Recording'}
-            </button>
+            <div>
+                {this.state.emotions == null? <div className = "ResultsContainer">No audio uploaded</div> : <ResultsContainer data= {this.state.emotions}/>}
+
+                <button
+                    onClick={() => {
+                        recording ? this.stopRecord() : this.startRecord();
+                    }}
+                >
+                    {recording ? 'Stop Recording' : 'Start Recording'}
+                </button>
+
+            </div>
         );
     }
 }
