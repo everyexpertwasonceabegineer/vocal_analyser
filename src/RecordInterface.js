@@ -1,6 +1,7 @@
 import React from 'react';
 import {getAudioStream, exportBuffer} from './utilities/audio.js'
 import Recorder from 'recorder-js';
+const axios = require('axios');
 
 class RecordInterface extends React.Component {
     constructor(props) {
@@ -44,8 +45,21 @@ class RecordInterface extends React.Component {
         const { recorder } = this.state;
         const { buffer } = await recorder.stop();
         const audio = exportBuffer(buffer[0]);
-        // Do your audio processing here.
-        console.log(audio);
+
+        //Do your audio processing here.
+        const formData = new FormData();
+        formData.append("wave", audio)
+        axios({
+            url: 'http://127.0.0.1:5000/vocal_analyser/api/analyse',
+            method: 'POST',
+            data: formData,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => console.log(res))
+
+
         this.setState({
             recording: false
         });
@@ -70,4 +84,3 @@ class RecordInterface extends React.Component {
 }
 
 export default RecordInterface;
-
