@@ -1,0 +1,17 @@
+.ResultsContainer {
+  outline: #4CAF50 solid 10px;
+  min-height: 30vh;
+  min-width: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  margin: 60px;
+}
+
+.TextContainer{
+    display: flex;
+    flex-direction: row;
+    margin: 10px
+}
