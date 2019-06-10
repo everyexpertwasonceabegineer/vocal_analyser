@@ -8,11 +8,16 @@ import json
 import wave
 import scipy.io.wavfile
 
+# https://stackoverflow.com/questions/55271912/flask-cli-throws-oserror-errno-8-exec-format-error-when-run-through-docker
+# https://askubuntu.com/questions/395124/how-come-a-python-file-is-executable-even-though-its-permissions-are-644
+# exec permission removed from file
+
+
 app = Flask(__name__)
 CORS(app)
 
 print("Loading library...")
-Vokaturi.load("lib/open/win/OpenVokaturi-3-3-win32.dll")
+Vokaturi.load("lib/open/macos/OpenVokaturi-3-3-mac64.dylib")
 print("Analyzed by: %s" % Vokaturi.versionAndLicense())
 
 @app.route("/vocal_analyser/api/analyse", methods =['POST'])
