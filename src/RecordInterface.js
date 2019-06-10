@@ -3,7 +3,10 @@ import {getAudioStream, exportBuffer} from './utilities/audio.js';
 import Recorder from 'recorder-js';
 import ResultsContainer from './ResultsContainer';
 import './ResultsContainer.css';
+import Waveform from './Waveform'
+
 const axios = require('axios');
+
 
 
 class RecordInterface extends React.Component {
@@ -13,7 +16,7 @@ class RecordInterface extends React.Component {
             stream: null,
             recording: false,
             recorder: null,
-            emotions: null
+            emotions: null,
         };
     }
     async componentDidMount() {
@@ -69,22 +72,20 @@ class RecordInterface extends React.Component {
         })
 
         this.setState({
-            recording: false
+            recording: false,
         });
     }
 
     render() {
         const { recording, stream } = this.state;
-
-
         // Don't show interface if their browser doesn't support it.
         if (!stream) {
             return null;
         }
         return (
             <div>
+                <Waveform/>
                 {this.state.emotions == null? <div className = "ResultsContainer">No audio uploaded</div> : <ResultsContainer data= {this.state.emotions}/>}
-
                 <button
                     onClick={() => {
                         recording ? this.stopRecord() : this.startRecord();
