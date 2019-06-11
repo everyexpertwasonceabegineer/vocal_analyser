@@ -2,9 +2,23 @@
  * Get access to the users microphone through the browser.
  *
  * https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Using_the_new_API_in_older_browsers
+ * from https://aws.amazon.com/blogs/machine-learning/capturing-voice-input-in-a-browser/
+ * from https://medium.com/@mattywilliams/recording-audio-with-react-for-amazon-lex-646bdc1b9f75
  */
 
+
 const recordSampleRate = 44100; //may not be depends on recording device but is the case for Chrome and Mozilla
+
+
+export function mergeBuffers(bufferArray, recLength) {
+      var result = new Float32Array(recLength);
+      var offset = 0;
+      for (var i = 0; i < bufferArray.length; i++) {
+        result.set(bufferArray[i], offset);
+        offset += bufferArray[i].length;
+      }
+      return result;
+}
 export function getAudioStream() {
     // Older browsers might not implement mediaDevices at all, so we set an empty object first
     if (navigator.mediaDevices === undefined) {
@@ -41,8 +55,11 @@ export function getAudioStream() {
  * Returns the encoded audio as a Blob.
  */
 export function exportBuffer(recBuffer) {
-    const downsampledBuffer = downsampleBuffer(recBuffer, 16000);
-    const encodedWav = encodeWAV(downsampledBuffer);
+    //const downsampledBuffer = downsampleBuffer(recBuffer, 16000);
+    //const encodedWav = encodeWAV(downsampledBuffer);
+
+    // next line added to stop downsampling
+    const encodedWav = encodeWAV(recBuffer);
     const audioBlob = new Blob([encodedWav], {
         type: 'application/octet-stream'
     });
