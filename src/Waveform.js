@@ -1,7 +1,7 @@
 import React from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import Regions from 'wavesurfer.js/src/plugin/regions.js';
-//import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline.js';
+import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline.js';
 //import Cursor from 'wavesurfer.js/src/plugin/cursor.js'
 
 
@@ -38,7 +38,11 @@ export default class Waveform extends React.Component{
                   slop: 5
               }
             }
-        )
+        ),
+        TimelinePlugin.create({
+          container: "#wave-timeline",
+          wavesurfer: this.wavesurfer
+        })
       ]
     });
     wavesurfer.load('http://ia902606.us.archive.org/35/items/shortpoetry_047_librivox/song_cjrg_teasdale_64kb.mp3');
