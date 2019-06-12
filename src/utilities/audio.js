@@ -6,19 +6,43 @@
  * from https://medium.com/@mattywilliams/recording-audio-with-react-for-amazon-lex-646bdc1b9f75
  */
 
-
+const context = new (window.AudioContext ||window.webkitAudioContext)();
 const recordSampleRate = 44100; //may not be depends on recording device but is the case for Chrome and Mozilla
 
 
 export function mergeBuffers(bufferArray, recLength) {
-      var result = new Float32Array(recLength);
-      var offset = 0;
-      for (var i = 0; i < bufferArray.length; i++) {
-        result.set(bufferArray[i], offset);
-        offset += bufferArray[i].length;
+      // has issue in work computer, merge differently instead
+      // var result = new Float32Array(recLength);
+      // var offset = 0;
+      // for (var i = 0; i < bufferArray.length; i++) {
+      //   result.set(bufferArray[i], offset);
+      //   offset += bufferArray[i].length;
+      // }
+      // return result;
+      var result = bufferArray[0];
+      for(var i = 1; i<bufferArray.length;i++) {
+          result = appendBuffer(result, bufferArray[i])
       }
-      return result;
+      return result.getChannelData(0);
 }
+
+export function appendBuffer(source1, source2) {
+    var buffer1 = context.createBuffer(1, source1.length, context.sampleRate)
+    var buffer2 = context.createBuffer(1, source2.length, context.sampleRate)
+    buffer1.copyToChannel(source1, 0);
+    buffer2.copyToChannel(source2, 0);
+    console.log(buffer1.getChannelData(0))
+    var numberOfChannels = Math.min( buffer1.numberOfChannels, buffer2.numberOfChannels );
+    var tmp = context.createBuffer( numberOfChannels, (buffer1.length + buffer2.length), buffer1.sampleRate );
+    for (var i=0; i<numberOfChannels; i++) {
+      var channel = tmp.getChannelData(i);
+      channel.set( buffer1.getChannelData(i), 0);
+      channel.set( buffer2.getChannelData(i), buffer1.length);
+    }
+    return tmp;
+}
+
+
 export function getAudioStream() {
     // Older browsers might not implement mediaDevices at all, so we set an empty object first
     if (navigator.mediaDevices === undefined) {
@@ -55,11 +79,11 @@ export function getAudioStream() {
  * Returns the encoded audio as a Blob.
  */
 export function exportBuffer(recBuffer) {
-    //const downsampledBuffer = downsampleBuffer(recBuffer, 16000);
-    //const encodedWav = encodeWAV(downsampledBuffer);
+    const downsampledBuffer = downsampleBuffer(recBuffer, 16000);
+    const encodedWav = encodeWAV(downsampledBuffer);
 
     // next line added to stop downsampling
-    const encodedWav = encodeWAV(recBuffer);
+    // const encodedWav = encodeWAV(recBuffer);
     const audioBlob = new Blob([encodedWav], {
         type: 'application/octet-stream'
     });
@@ -80,7 +104,7 @@ export function downsampleBuffer(buffer, exportSampleRate) {
         const nextOffsetBuffer = Math.round((offsetResult + 1) *   sampleRateRatio);
         let accum = 0;
         let count = 0;
-        for (var i = offsetBuffer; i < nextOffsetBuffer && i <    buffer.length; i++) {
+        for (var i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
             accum += buffer[i];
             count++;
         }
@@ -106,6 +130,8 @@ export function writeString(view, offset, string) {
  * Encodes the buffer as a WAV file.
  */
 export function encodeWAV(samples) {
+    // after downsampling
+    const recordSampleRate2 = 16000;
     const buffer = new ArrayBuffer(44 + samples.length * 2);
     const view = new DataView(buffer);
     writeString(view, 0, 'RIFF');
@@ -115,8 +141,8 @@ export function encodeWAV(samples) {
     view.setUint32(16, 16, true);
     view.setUint16(20, 1, true);
     view.setUint16(22, 1, true);
-    view.setUint32(24, recordSampleRate, true);
-    view.setUint32(28, recordSampleRate * 2, true);
+    view.setUint32(24, recordSampleRate2, true);
+    view.setUint32(28, recordSampleRate2 * 2, true);
     view.setUint16(32, 2, true);
     view.setUint16(34, 16, true);
     writeString(view, 36, 'data');
