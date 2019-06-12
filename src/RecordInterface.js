@@ -17,7 +17,8 @@ class RecordInterface extends React.Component {
             recorder: null,
             emotions: null,
             audio: null,
-            bufferstack: []
+            bufferstack: [],
+            page: 1
         };
     }
     async componentDidMount() {
@@ -52,11 +53,11 @@ class RecordInterface extends React.Component {
         // testing out multiple calls to API
         setTimeout(
             () => this.intermediateStop(),
-            3000
+            1000
         );
         setTimeout(
             () => this.stopRecord(),
-            6000
+            2000
         );
     }
 
@@ -113,10 +114,30 @@ class RecordInterface extends React.Component {
         if (!stream) {
             return null;
         }
+
+        let pageToShow;
+        if (this.state.page == 1 && this.state.emotions == null) {
+            pageToShow = <div className = "ResultsContainer">No audio uploaded</div>;
+        } else if(this.state.page ==1 && this.state.emotions!=null){
+            pageToShow = <ResultsContainer data= {this.state.emotions}/>
+        } else {
+            pageToShow = null;
+        }
         return (
             <div>
                 <Waveform audio = {this.state.audio} />
-                {this.state.emotions == null? <div className = "ResultsContainer">No audio uploaded</div> : <ResultsContainer data= {this.state.emotions}/>}
+                <button
+                    onClick={() => {
+                        this.setState({page : 1});
+                    }}
+                > 1 </button>
+                <button
+                    onClick={() => {
+                        this.setState({page : 2});
+                    }}
+                > 2 </button>
+
+                {pageToShow}
                 <button
                     onClick={() => {
                         recording ? this.stopRecord() : this.startRecord();
