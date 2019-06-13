@@ -3,7 +3,8 @@ import {getAudioStream, exportBuffer, mergeBuffers} from './utilities/audio.js';
 import Recorder from 'recorder-js';
 import ResultsContainer from './ResultsContainer';
 import './ResultsContainer.css';
-import Waveform from './Waveform'
+import Waveform from './Waveform';
+import IBMSpeechToTextContainer from './IBMSpeechToTextContainer';
 
 const axios = require('axios');
 
@@ -116,12 +117,12 @@ class RecordInterface extends React.Component {
         }
 
         let pageToShow;
-        if (this.state.page == 1 && this.state.emotions == null) {
+        if (this.state.page === 1 && this.state.emotions === null) {
             pageToShow = <div className = "ResultsContainer">No audio uploaded</div>;
-        } else if(this.state.page ==1 && this.state.emotions!=null){
+        } else if(this.state.page ===1 && this.state.emotions!==null){
             pageToShow = <ResultsContainer data= {this.state.emotions}/>
         } else {
-            pageToShow = null;
+            pageToShow = <IBMSpeechToTextContainer/>;
         }
         return (
             <div>
