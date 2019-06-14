@@ -6,6 +6,8 @@ import './ResultsContainer.css';
 import "./Waveform.css";
 import Waveform from './Waveform';
 import IBMSpeechToTextContainer from './IBMSpeechToTextContainer';
+import Lottie from 'react-lottie'
+import animationData from './utilities/data.json'
 
 
 
@@ -112,8 +114,6 @@ class RecordInterface extends React.Component {
     }
 
 
-
-
     render() {
         const { recording, stream } = this.state;
         // Don't show interface if their browser doesn't support it.
@@ -133,6 +133,14 @@ class RecordInterface extends React.Component {
             pageToShow = <IBMSpeechToTextContainer/>;
         }
 
+        const defaultOptions = {
+          loop: true,
+          autoplay: false,
+          animationData: animationData,
+          rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+          }
+        };
 
         return (
             <div>
@@ -152,12 +160,19 @@ class RecordInterface extends React.Component {
                 </div>
                 <div className="WaveformContainer">
                     <Waveform audio = {this.state.audio} />
+
+
                     <button
+                        className = "recordButton"
                         onClick={() => {
                             recording ? this.stopRecord() : this.startRecord();
                         }}
                     >
-                        {recording ? 'Stop Recording' : 'Start Recording'}
+                        <Lottie options={defaultOptions}
+                          height={70}
+                          width={70}
+                          isStopped={!this.state.recording}
+                        />
                     </button>
                 </div>
                 {pageToShow}
