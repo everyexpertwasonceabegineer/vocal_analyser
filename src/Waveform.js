@@ -4,7 +4,6 @@ import RegionsPlugin from 'wavesurfer.js/src/plugin/regions.js';
 import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline.js';
 import "./Waveform.css";
 import { FaPlay, FaPause, FaStop } from "react-icons/fa";
-import { IconContext } from "react-icons";
 
 
 export default class Waveform extends React.Component{
@@ -35,12 +34,12 @@ export default class Waveform extends React.Component{
                       start: 1,
                       end: 3,
                       color: 'hsla(400, 100%, 30%, 0.5)',
-                      "data": { "note": "羅生門" }
+                      "data": { "note": "Anger" }
                   }, {
                       start: 5,
                       end: 7,
                       color: 'hsla(200, 50%, 70%, 0.4)',
-                      "data": { "note": "芥川龍之介" }
+                      "data": { "note": "Sadness" }
                   }
               ],
               // dragSelection: {
