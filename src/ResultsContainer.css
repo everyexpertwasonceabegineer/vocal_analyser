@@ -1,5 +1,4 @@
 .ResultsContainer {
-  outline: #4CAF50 solid 10px;
   min-height: 30vh;
   min-width: 60vh;
   display: flex;
@@ -8,10 +7,46 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   margin: 60px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #ffffff;
+  margin: 30px;
+  padding: 10px;
 }
 
 .TextContainer{
     display: flex;
     flex-direction: row;
     margin: 10px
+}
+
+.paragraph1 {
+    white-space: pre;
+}
+
+.pageButtonContainer {
+    background-color: white;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+}
+
+.buttonStyleClicked {
+    height: 30px;
+    width: 50px;
+    font-weight: bold;
+    color: black;
+
+}
+
+.buttonStyleNot {
+    height: 30px;
+    width: 50px;
+}
+
+.buttonStyleNot:hover {
+  background-color: gray;
+  color: black
 }

@@ -2,7 +2,9 @@ import React from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/src/plugin/regions.js';
 import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline.js';
-import "./Waveform.css"
+import "./Waveform.css";
+import { FaPlay, FaPause, FaStop } from "react-icons/fa";
+import { IconContext } from "react-icons";
 
 
 export default class Waveform extends React.Component{
@@ -41,9 +43,9 @@ export default class Waveform extends React.Component{
                       "data": { "note": "芥川龍之介" }
                   }
               ],
-              dragSelection: {
-                  slop: 5
-              }
+              // dragSelection: {
+              //     slop: 5
+              // }
             }
         ),
         TimelinePlugin.create({
@@ -84,30 +86,46 @@ export default class Waveform extends React.Component{
 
 
   render(){
+
+    let playPause;
+    if (this.state.playing === true) {
+        playPause = <div className ="waveform-button"
+        onClick={() => {
+            this.state.wavesurfer.pause();
+            this.setState({
+              playing: false
+            });
+        }}>
+          <FaPause color = '#4885ed'/>
+        </div>
+    } else {
+        playPause = <div className ="waveform-button"
+        onClick={() => {
+            this.state.wavesurfer.play();
+            this.setState({
+              playing: true
+            });
+        }}>
+          <FaPlay color = '#3cba54'/>
+        </div>
+    }
+
     return(
-      <div className="WaveformContainer">
+      <div className="Waveform">
         {this.state.regionnote}
         <div id="waveform"></div>
         <div id="wave-timeline"></div>
-        <div id ="waveform-button-container">
-          <button
-            onClick={() => {
-                this.state.wavesurfer.playPause();
-                this.setState({
-                  playing: !this.state.playing
-                });
-            }}>
-          {this.state.playing? 'Pause' : 'Play'}
-          </button>
-          <button
+        <div className ="waveform-button-container">
+            {playPause}
+            <div className ="waveform-button"
             onClick={() => {
                 this.state.wavesurfer.stop();
                 this.setState({
                   playing: false
                 });
             }}>
-          Stop
-          </button>
+              <FaStop color = 'red'/>
+            </div>
         </div>
       </div>
     )

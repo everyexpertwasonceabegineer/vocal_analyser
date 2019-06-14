@@ -7,7 +7,7 @@ class ResultsContainer extends React.Component {
             if (this.props.data === "no result") {
                 container =
                     <div className = "TextContainer">
-                        <b>Cannot determine emotions</b>
+                        <code>Cannot determine emotions</code>
                     </div>;
             } else {
                 container =

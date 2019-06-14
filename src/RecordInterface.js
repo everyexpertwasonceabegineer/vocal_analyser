@@ -3,8 +3,11 @@ import {getAudioStream, exportBuffer, mergeBuffers} from './utilities/audio.js';
 import Recorder from 'recorder-js';
 import ResultsContainer from './ResultsContainer';
 import './ResultsContainer.css';
+import "./Waveform.css";
 import Waveform from './Waveform';
 import IBMSpeechToTextContainer from './IBMSpeechToTextContainer';
+
+
 
 const axios = require('axios');
 
@@ -109,6 +112,8 @@ class RecordInterface extends React.Component {
     }
 
 
+
+
     render() {
         const { recording, stream } = this.state;
         // Don't show interface if their browser doesn't support it.
@@ -118,35 +123,44 @@ class RecordInterface extends React.Component {
 
         let pageToShow;
         if (this.state.page === 1 && this.state.emotions === null) {
-            pageToShow = <div className = "ResultsContainer">No audio uploaded</div>;
+            pageToShow =
+                <div className = "ResultsContainer">
+                    <code>No audio uploaded</code>
+                </div>;
         } else if(this.state.page ===1 && this.state.emotions!==null){
             pageToShow = <ResultsContainer data= {this.state.emotions}/>
         } else {
             pageToShow = <IBMSpeechToTextContainer/>;
         }
+
+
         return (
             <div>
-                <Waveform audio = {this.state.audio} />
-                <button
-                    onClick={() => {
-                        this.setState({page : 1});
-                    }}
-                > 1 </button>
-                <button
-                    onClick={() => {
-                        this.setState({page : 2});
-                    }}
-                > 2 </button>
-
+                <div className = "pageButtonContainer">
+                    <div
+                        className =  {this.state.page ==1? "buttonStyleClicked" : "buttonStyleNot"}
+                        onClick={() => {
+                            this.setState({page : 1});
+                        }}
+                    > 1 </div>
+                    <div
+                        className =  {this.state.page ==2? "buttonStyleClicked" : "buttonStyleNot"}
+                        onClick={() => {
+                            this.setState({page : 2});
+                        }}
+                    > 2 </div>
+                </div>
+                <div className="WaveformContainer">
+                    <Waveform audio = {this.state.audio} />
+                    <button
+                        onClick={() => {
+                            recording ? this.stopRecord() : this.startRecord();
+                        }}
+                    >
+                        {recording ? 'Stop Recording' : 'Start Recording'}
+                    </button>
+                </div>
                 {pageToShow}
-                <button
-                    onClick={() => {
-                        recording ? this.stopRecord() : this.startRecord();
-                    }}
-                >
-                    {recording ? 'Stop Recording' : 'Start Recording'}
-                </button>
-
             </div>
         );
     }

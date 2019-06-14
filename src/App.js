@@ -11,12 +11,9 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                Vocal Analyser
+                <p className = "title">V O C A L    A N A L Y S E R</p>
             </header>
             <RecordInterface/>
-            <p>
-                Press the <code>button</code> above to start recording
-            </p>
         </div>
     );
 }

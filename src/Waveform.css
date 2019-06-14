@@ -1,7 +1,35 @@
 .WaveformContainer {
-  height: 30vh;
+    background-color: #ffffff;
+    margin: 30px;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.Waveform {
+    background-color: #ffffff;
 }
 
 .waveform-button-container {
-  padding: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.waveform-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #b5b6b6;
+    width: 30px
+}
+.waveform-button:hover {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #808080;
+    width: 30px
 }
